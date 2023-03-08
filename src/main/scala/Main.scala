@@ -1,35 +1,26 @@
-import model.{Element, Field}
+import model.Element
 import net.liftweb.json.{DefaultFormats, Formats, parse}
 import net.liftweb.json.Serialization.write
-import serializers.{ElementSerializer, FieldSerializer}
+import serializers.ElementSerializer
 
 object Main {
-  implicit val formats: Formats = DefaultFormats + FieldSerializer + ElementSerializer
+  implicit val formats: Formats = DefaultFormats + ElementSerializer
   def main(args: Array[String]): Unit = {
-    val testFields =
+    val defaultElement =
       """{
-        "greeting": "Hello",
-        "id": 1234,
-      }""".stripMargin
-    val deserializedJson = parse(testFields).extract[Map[String, Field]]
-    val deserializedJsonString = write(deserializedJson)
-    println(deserializedJsonString)
-
-    val testElementWithStringFields =
-      """{
-        "name": "Doug",
+        "elementName": "Doug",
         "fields": {
           "greeting": "Hello",
           "id": 1234,
         }
       }""".stripMargin
-    val deserializedElement = parse(testElementWithStringFields).extract[Element]
-    val deserializedElementString = write(deserializedElement)
-    println(deserializedElementString)
+    val parsedDefaultElement = parse(defaultElement).extract[Element]
+    val legacyElementJson: String = write(parsedDefaultElement)
+    println(legacyElementJson)
 
-    val testElementWithObjectFields =
+    val cartoonElement =
       """{
-        "name": "Doug",
+        "elementName": "cartoon",
         "fields": {
           "greeting": "Hello",
           "id": 1234,
@@ -39,8 +30,8 @@ object Main {
           }
         }
       }""".stripMargin
-      val deserializedElementWithObjectField = parse(testElementWithObjectFields).extract[Element]
-      val deserializedElementWithObjectFieldString = write(deserializedElementWithObjectField)
-      println(deserializedElementWithObjectFieldString)
+      val parsedCartoonElement = parse(cartoonElement).extract[Element]
+      val cartoonElementJson: String = write(parsedCartoonElement)
+      println(cartoonElementJson)
   }
 }
