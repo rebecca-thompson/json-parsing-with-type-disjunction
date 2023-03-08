@@ -10,8 +10,7 @@ object ElementSerializer extends Serializer[Element] {
 
   override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Element] = {
     case(TypeInfo(ElementClass, _), json) => json match {
-      case JObject(JField("elementName", JString(elementName)) ::
-        JField("fields", fields) :: Nil) =>
+      case JObject(JField("elementName", JString(elementName)) :: JField("fields", fields) :: Nil) =>
           elementName match {
             case "cartoon" =>
               CartoonElement(fields.extract[CartoonFields])
